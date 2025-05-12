@@ -11,12 +11,8 @@ export const registerUser = async (req, res) => {
     const user = await userService.registerUser({ username, email, password });
     const token = await user.generateToken();
     res.status(201).json({
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        token,
-      },
+      user,
+      token,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -33,12 +29,8 @@ export const loginUser = async (req, res) => {
     const user = await userService.loginUser({ email, password });
     const token = await user.generateToken();
     res.status(200).json({
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        token,
-      },
+      user,
+      token,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
