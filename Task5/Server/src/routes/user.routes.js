@@ -10,5 +10,12 @@ router.post(
   userController.registerUser
 );
 router.post("/login", userMiddleware.loginValidation, userController.loginUser);
+router.get("/logout", userMiddleware.authUser, userController.logoutUser);
+router.get("/profile", userMiddleware.authUser, (req, res) => {
+  res.status(200).json({
+    message: "User profile",
+    user: req.user,
+  });
+});
 
 export default router;

@@ -31,42 +31,36 @@ export const loginValidation = [
 export const authUser = async (req, res, next) => {
   try {
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-    const isTokenBlacklisted = await redis.get(`blacklist:${token}`);
-    if (isTokenBlacklisted) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
+    if (!token) return res.status(401).json({ message: "No token provided" });
 
-    const decoded = User.verify(token);
+    const blacklisted = await redis.get(`blacklist:${token}`);
+    if (blacklisted)
+      return res.status(401).json({ message: "Token blacklisted" });
 
-    let user = await redis.get(`user:${decoded.id}`);
+    const decoded = User.verifyToken(token);
+    if (!decoded) return res.status(401).json({ message: "Invalid token" });
 
-    if (!user) {
-      user = await User.findById(decoded.id);
+    const userId = decoded._id;
+
+    let user = await redis.get(`user:${userId}`);
+    if (user) {
+      user = JSON.parse(user);
+    } else {
+      user = await User.findById(userId);
+      if (!user) return res.status(401).json({ message: "User not found" });
       if (user) {
         delete user._doc.password;
-        await redis.set(`user:${decoded.id}`, JSON.stringify(user));
-      } else {
-        return res.status(401).json({
-          message: "Unauthorized",
-        });
+        await redis.set(`user:${userId}`, JSON.stringify(user));
       }
-    } else {
-      user = JSON.parse(user);
     }
+
     req.user = user;
     req.tokenData = { token, ...decoded };
     return next();
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error",
-      error: error.message,
-    });
+    console.error("Auth error:", error);
+    res
+      .status(401)
+      .json({ message: "Authentication failed", error: error.message });
   }
 };
