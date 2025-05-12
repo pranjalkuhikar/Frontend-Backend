@@ -46,15 +46,35 @@ export const loginUser = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
-  const timeRemainingForToken = req.tokenData.exp * 1000 - Date.now();
-  await redis.set(
-    `blacklist:${req.tokenData.token}`,
-    "true",
-    "EX",
-    Math.floor(timeRemainingForToken / 1000)
-  );
-  res.status(200).json({
-    message: "User logged out",
-    timeRemainingForToken,
-  });
+  try {
+    const timeRemainingForToken = req.tokenData.exp * 1000 - Date.now();
+
+    // If token is already expired, no need to blacklist
+    if (timeRemainingForToken <= 0) {
+      return res.status(200).json({
+        message: "Token already expired",
+      });
+    }
+
+    // Blacklist the token in Redis
+    await redis.set(
+      `blacklist:${req.tokenData.token}`,
+      "true",
+      "EX",
+      Math.floor(timeRemainingForToken / 1000)
+    );
+
+    // Clear the cookie
+    res.clearCookie("token");
+
+    return res.status(200).json({
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({
+      message: "Error during logout",
+      error: error.message,
+    });
+  }
 };
