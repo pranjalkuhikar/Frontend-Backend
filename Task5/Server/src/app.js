@@ -20,10 +20,10 @@ app.use(
 );
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://your-production-domain.com"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
+    origin: config.CORS_ORIGIN,
+    methods: config.CORS_METHODS,
+    allowedHeaders: config.CORS_ALLOWED_HEADERS,
+    credentials: config.CORS_CREDENTIALS,
   })
 );
 app.use("/public", express.static(path.join(process.cwd(), "public")));
