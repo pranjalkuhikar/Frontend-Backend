@@ -22,4 +22,23 @@ async function generateContent(prompt) {
   }
 }
 
+async function generateCaptionFromImageBuffer(imageBuffer) {
+  try {
+    const result = await genAI.models.generateContent([
+      {
+        initData: {
+          data: imageBuffer.toString("base64"),
+          mimeType: "image/jpeg",
+        },
+      },
+      "Caption this image",
+    ]);
+
+    return result.text;
+  } catch (error) {
+    console.error("Error generating caption from image:", error);
+    throw new Error(`AI generation failed: ${error.message}`);
+  }
+}
+
 export default generateContent;
