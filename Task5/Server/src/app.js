@@ -1,6 +1,7 @@
 import express from "express";
 import userRouters from "./routes/user.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
+import postRoutes from "./routes/post.routes.js";
 import path from "path";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -31,5 +32,6 @@ app.use("/public", express.static(path.join(process.cwd(), "public")));
 
 app.use("/users", userRouters);
 app.use("/ai", aiRoutes);
+app.use("/posts", postRoutes);
 
 export default app;
