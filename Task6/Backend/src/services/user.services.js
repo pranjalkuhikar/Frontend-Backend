@@ -4,7 +4,9 @@ export const register = async ({ username, email, password }) => {
   if (!username || !email || !password) {
     throw new Error("All fields are required");
   }
-  const alreadyExists = userModel.findOne({ $or: [{ email }, { username }] });
+  const alreadyExists = await userModel.findOne({
+    $or: [{ email }, { username }],
+  });
   if (alreadyExists) {
     throw new Error("User already exists");
   }
@@ -26,5 +28,6 @@ export const login = async ({ email, password }) => {
   if (!isMatch) {
     throw new Error("Invalid credentials");
   }
-  return user;
+  const token = await user.generateAuthToken();
+  return { user, token };
 };
