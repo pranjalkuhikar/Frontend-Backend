@@ -2,12 +2,6 @@ import { register, login } from "../services/user.services.js";
 
 export const registerUser = async (req, res) => {
   try {
-    if (req.fileUploadError) {
-      console.error("File upload error:", req.fileUploadError);
-      return res.status(400).json({
-        message: req.fileUploadError.message || "File upload error",
-      });
-    }
     const { username, email, password } = req.body;
     let profilePhoto = "";
 
@@ -27,8 +21,6 @@ export const registerUser = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.error("Registration error:", error.message);
-    console.error("Error stack:", error.stack);
     return res.status(500).json({
       message: error.message || "Internal server error",
     });
