@@ -11,13 +11,15 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handlerChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
+
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handlerSubmit = async (e) => {
     e.preventDefault();
     try {
