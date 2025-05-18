@@ -10,12 +10,9 @@ const Auth = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user);
-
     if (user.username !== "" || user.email !== "") {
       return;
     }
-
     axiosInstances
       .get("/auth")
       .then((res) => {

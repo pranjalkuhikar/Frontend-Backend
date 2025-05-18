@@ -59,10 +59,7 @@ const Register = () => {
         },
       });
 
-      toast.success("Registration successful", {
-        position: "top-right",
-        autoClose: 5000,
-      });
+      toast.success("Registration successful");
 
       setTimeout(() => {
         setLoading(false);
@@ -70,10 +67,7 @@ const Register = () => {
       }, 1000);
     } catch (error) {
       setLoading(false);
-      toast.error(error.response?.data?.message || "Registration failed", {
-        position: "top-right",
-        autoClose: 5000,
-      });
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 

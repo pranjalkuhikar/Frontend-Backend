@@ -33,10 +33,7 @@ const Login = () => {
         })
       );
 
-      toast.success("Login successful", {
-        position: "top-right",
-        autoClose: 5000,
-      });
+      toast.success("Login successful");
 
       setTimeout(() => {
         setLoading(false);
@@ -46,10 +43,7 @@ const Login = () => {
       setLoading(false);
       console.error("Login error:", error);
       console.error("Error response:", error.response?.data);
-      toast.error(error.response?.data?.message || "Login failed", {
-        position: "top-right",
-        autoClose: 5000,
-      });
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
   return (
