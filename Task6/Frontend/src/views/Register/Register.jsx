@@ -3,8 +3,6 @@ import axiosInstances from "../../utiles/Axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/features/users/user.feature";
 
 const Register = () => {
   const [formValue, setFormValue] = useState({
@@ -13,7 +11,6 @@ const Register = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handlerChange = (e) => {
@@ -24,15 +21,13 @@ const Register = () => {
     try {
       setLoading(true);
       await axiosInstances.post("/register", formValue);
-      dispatch(setUser(formValue));
       toast.success("Registration successful", {
         position: "top-right",
         autoClose: 5000,
       });
-
       setTimeout(() => {
         setLoading(false);
-        navigate("/home");
+        navigate("/login");
       }, 1000);
     } catch (error) {
       setLoading(false);

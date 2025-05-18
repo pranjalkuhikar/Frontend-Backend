@@ -24,16 +24,23 @@ export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await login({
+    const result = await login({
       email,
       password,
     });
+    res.cookie("token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     res.status(200).json({
       message: "User logged in successfully",
-      user,
+      result,
     });
   } catch (error) {
-    return res.status(500).json({
+    console.error("Login error:", error.message);
+    return res.status(401).json({
       message: error.message || "Internal server error",
     });
   }
