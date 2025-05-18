@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-
+  console.log(user);
   useEffect(() => {
     if (user.username === "" || user.email === "") {
       navigate("/login");
