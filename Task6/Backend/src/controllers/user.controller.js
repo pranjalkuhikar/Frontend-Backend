@@ -46,9 +46,9 @@ export const loginUser = async (req, res) => {
   }
 };
 
-export const profile = async (req, res) => {
+export const auth = async (req, res) => {
   return res.status(200).json({
-    message: "User profile",
+    message: "Authenticated",
     user: req.user,
   });
 };

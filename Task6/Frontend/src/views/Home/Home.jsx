@@ -1,16 +1,7 @@
-import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-  console.log(user);
-  useEffect(() => {
-    if (user.username === "" || user.email === "") {
-      navigate("/login");
-    }
-  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">

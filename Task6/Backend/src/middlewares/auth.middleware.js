@@ -6,7 +6,7 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
   try {
-    const data = userModel.verifyToken(token);
+    const data = userModel.verifyAuthToken(token);
     req.user = data;
     next();
   } catch (error) {
