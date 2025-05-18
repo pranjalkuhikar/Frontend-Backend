@@ -29,6 +29,7 @@ const Login = () => {
         setUser({
           username: response.data.result.user.username,
           email: response.data.result.user.email,
+          profilePhoto: response.data.result.user.profilePhoto,
         })
       );
 

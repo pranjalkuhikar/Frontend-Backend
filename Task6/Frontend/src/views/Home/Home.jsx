@@ -9,6 +9,15 @@ const Home = () => {
         <h2 className="text-2xl font-bold mb-6 text-center">Welcome</h2>
         {user.username ? (
           <div className="text-center">
+            {user.profilePhoto && (
+              <div className="mb-4 flex justify-center">
+                <img
+                  src={user.profilePhoto}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-indigo-500"
+                />
+              </div>
+            )}
             <p className="text-lg mb-2">
               Hello, <span className="font-bold">{user.username}</span>!
             </p>

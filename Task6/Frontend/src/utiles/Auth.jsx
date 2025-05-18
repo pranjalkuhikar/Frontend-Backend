@@ -24,6 +24,7 @@ const Auth = ({ children }) => {
             setUser({
               username: res.data.user.username,
               email: res.data.user.email,
+              profilePhoto: res.data.user.profilePhoto,
             })
           );
         }

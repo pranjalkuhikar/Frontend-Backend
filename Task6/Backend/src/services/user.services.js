@@ -1,6 +1,11 @@
 import userModel from "../models/user.model.js";
 
-export const register = async ({ username, email, password }) => {
+export const register = async ({
+  username,
+  email,
+  password,
+  profilePhoto = "",
+}) => {
   if (!username || !email || !password) {
     throw new Error("All fields are required");
   }
@@ -11,7 +16,12 @@ export const register = async ({ username, email, password }) => {
     throw new Error("User already exists");
   }
   const hashedPassword = await userModel.hashPassword(password);
-  const user = new userModel({ username, email, password: hashedPassword });
+  const user = new userModel({
+    username,
+    email,
+    password: hashedPassword,
+    profilePhoto,
+  });
   await user.save();
   return user;
 };

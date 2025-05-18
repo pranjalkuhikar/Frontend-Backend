@@ -5,11 +5,13 @@ export const userSlice = createSlice({
   initialState: {
     username: "",
     email: "",
+    profilePhoto: "",
   },
   reducers: {
     setUser: (state, action) => {
       state.username = action.payload.username || "";
       state.email = action.payload.email || "";
+      state.profilePhoto = action.payload.profilePhoto || "";
     },
   },
 });

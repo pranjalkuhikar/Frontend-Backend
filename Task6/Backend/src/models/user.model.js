@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    profilePhoto: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
@@ -47,7 +51,12 @@ userSchema.methods.comparePassword = async (password, hashedPassword) => {
 
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
-    { _id: this._id, username: this.username, email: this.email },
+    {
+      _id: this._id,
+      username: this.username,
+      email: this.email,
+      profilePhoto: this.profilePhoto,
+    },
     config.JWT_SECRET,
     { expiresIn: config.JWT_EXPIRATION_TIME }
   );
