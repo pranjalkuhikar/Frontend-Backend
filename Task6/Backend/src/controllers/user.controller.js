@@ -45,3 +45,10 @@ export const loginUser = async (req, res) => {
     });
   }
 };
+
+export const profile = async (req, res) => {
+  return res.status(200).json({
+    message: "User profile",
+    user: req.user,
+  });
+};
