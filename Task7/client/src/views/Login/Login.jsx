@@ -1,20 +1,32 @@
 import { useState } from "react";
 import axiosInstance from "../../utiles/Axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/features/user/user.feature";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.post(
+      const response = await axiosInstance.post(
         "/login",
         { email, password },
         { withCredentials: true }
       );
+
+      dispatch(
+        setUser({
+          username: response.data.user.user.username,
+          email: response.data.user.user.email,
+          profilePhoto: response.data.user.user.profilePhoto,
+        })
+      );
+
       navigate("/home");
       setEmail("");
       setPassword("");
