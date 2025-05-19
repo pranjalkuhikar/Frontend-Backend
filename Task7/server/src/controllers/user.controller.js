@@ -1,17 +1,24 @@
 import config from "../config/config.js";
-import { registerService } from "../services/user.services.js";
+import { registerService, loginService } from "../services/user.services.js";
 
 export const registerController = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    let profilePhoto = req.file ? req.file.path : "";
+    let profilePhoto = "";
+
+    if (req.file && req.file.path) {
+      profilePhoto = req.file.path;
+    }
     const user = await registerService({
       username,
       email,
       password,
       profilePhoto,
     });
-    res.status(201).json(user);
+    res.status(201).json({
+      message: "User registered successfully",
+      user,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -26,7 +33,10 @@ export const loginController = async (req, res) => {
       secure: config.NODE_ENV === "production",
       sameSite: "strict",
     });
-    res.status(200).json(user);
+    res.status(200).json({
+      message: "User logged in successfully",
+      user,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

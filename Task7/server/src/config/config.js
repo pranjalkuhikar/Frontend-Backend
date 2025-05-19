@@ -3,7 +3,7 @@ dotenv.config();
 
 const _config = {
   PORT: process.env.PORT || 3000,
-  DB_URL: process.env.DB_URL || "mongodb://localhost:27017/myapp",
+  DB_URL: process.env.DB_URL,
   SECRET_KEY: process.env.SECRET_KEY,
   EXPIRE_KEY: process.env.EXPIRE_KEY,
   NODE_ENV: process.env.NODE_ENV || "development",

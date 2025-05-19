@@ -34,10 +34,10 @@ userSchema.methods.comparePassword = async function (password, hashPassword) {
   if (!password) {
     throw new Error("Password is required");
   }
-  if (!this.hashPassword) {
+  if (!hashPassword) {
     throw new Error("Password is required");
   }
-  return await bcrypt.compare(password, this.hashPassword);
+  return await bcrypt.compare(password, hashPassword);
 };
 userSchema.methods.generateToken = function (user) {
   const token = jwt.sign(
