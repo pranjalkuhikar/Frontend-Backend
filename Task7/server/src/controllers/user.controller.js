@@ -41,3 +41,10 @@ export const loginController = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const authController = async (req, res) => {
+  return res.status(200).json({
+    message: "User authenticated successfully",
+    user: req.user,
+  });
+};
