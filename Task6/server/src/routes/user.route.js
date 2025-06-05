@@ -1,13 +1,14 @@
 import express from "express";
 import { registerUser, loginUser } from "../controllers/user.controller.js";
-import {
-  validateRegister,
-  validateLogin,
-} from "../middlewares/user.validator.js";
+import { validateUserInput } from "../middlewares/user.validator.js";
+// import { csrfMiddleware } from "../middlewares/csrf.middleware.js";
 
 const router = express.Router();
 
-router.post("/register", validateRegister, registerUser);
-router.post("/login", validateLogin, loginUser);
+// Apply CSRF middleware to get token
+// router.use(csrfMiddleware);
+
+router.post("/register", validateUserInput, registerUser);
+router.post("/login", validateUserInput, loginUser);
 
 export default router;

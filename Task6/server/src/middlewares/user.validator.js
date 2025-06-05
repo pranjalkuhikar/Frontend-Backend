@@ -27,28 +27,40 @@ const loginSchema = zod.object({
   password: zod.string().min(6, "Password is required"),
 });
 
+// Common validation middleware
+export const validateUserInput = (req, res, next) => {
+  if (req.path === "/register") {
+    return validateRegister(req, res, next);
+  } else if (req.path === "/login") {
+    return validateLogin(req, res, next);
+  }
+  next();
+};
+
 // Middleware for validating registration
-export const validateRegister = (req, res, next) => {
+export const validateRegister = async (req, res, next) => {
   try {
-    registerSchema.parse(req.body);
+    const validatedData = await registerSchema.parseAsync(req.body);
+    req.body = validatedData;
     next();
   } catch (error) {
     return res.status(400).json({
       status: "error",
-      message: error.errors[0].message,
+      message: error.errors?.[0]?.message || "Validation failed",
     });
   }
 };
 
 // Middleware for validating login
-export const validateLogin = (req, res, next) => {
+export const validateLogin = async (req, res, next) => {
   try {
-    loginSchema.parse(req.body);
+    const validatedData = await loginSchema.parseAsync(req.body);
+    req.body = validatedData;
     next();
   } catch (error) {
     return res.status(400).json({
       status: "error",
-      message: error.errors[0].message,
+      message: error.errors?.[0]?.message || "Validation failed",
     });
   }
 };
