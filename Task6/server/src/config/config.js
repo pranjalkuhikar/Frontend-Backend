@@ -9,6 +9,7 @@ const _config = {
   FRONTEND_URL: process.env.FRONTEND_URL,
   COOKIE_SECRET: process.env.COOKIE_SECRET,
   NODE_ENV: process.env.NODE_ENV,
+  DISABLE_CSRF: process.env.DISABLE_CSRF,
 };
 
 const config = Object.freeze(_config);

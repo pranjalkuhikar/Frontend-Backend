@@ -28,41 +28,24 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
   FOR REACT FRONTEND: Uncomment these
 */
 // 1. MongoDB query sanitization
-// app.use(mongoSanitize());
+app.use(mongoSanitize());
 
 // 2. XSS protection
-// app.use(xss());
+app.use(xss());
 
 // 3. HTTP Parameter Pollution protection
-// app.use(hpp());
+app.use(hpp());
 
 // 4. Request timeout protection - 1 minute
-// app.use(
-//   timeout({
-//     timeout: 60000,
-//     handler: (req, res) => {
-//       res.status(408).json({
-//         status: "error",
-//         message: "Request timeout",
-//       });
-//     },
-//   })
-// );
-
-// 5. CSRF protection
-// const csrfProtection = csrf({
-//   cookie: {
-//     secure: config.NODE_ENV === "production",
-//     sameSite: "strict",
-//     httpOnly: true,
-//   },
-// });
-
-/* 
-  FOR POSTMAN TESTING: Comment out this line
-  FOR REACT FRONTEND: Uncomment this line
-*/
-// app.use("/api/users", csrfProtection);
+app.use((req, res, next) => {
+  req.setTimeout(60000, () => {
+    res.status(408).json({
+      status: "error",
+      message: "Request timeout",
+    });
+  });
+  next();
+});
 
 // 6. CORS configuration
 app.use(
@@ -93,8 +76,8 @@ app.use(morgan(config.NODE_ENV === "development" ? "dev" : "combined"));
 // Debug middleware (only in development)
 if (config.NODE_ENV === "development") {
   app.use((req, res, next) => {
-    console.log(`[DEBUG] ${req.method} ${req.path}`);
-    console.log("Request Body:", req.body);
+    // console.log(`[DEBUG] ${req.method} ${req.path}`);
+    // console.log("Request Body:", req.body);
     next();
   });
 }
@@ -118,7 +101,6 @@ app.use((err, req, res, next) => {
     path: req.path,
     method: req.method,
   });
-
   // Handle specific types of errors
   if (err.name === "ValidationError") {
     return res.status(400).json({
@@ -131,14 +113,6 @@ app.use((err, req, res, next) => {
     return res.status(401).json({
       status: "error",
       message: "Invalid token",
-    });
-  }
-
-  // Handle CSRF token errors
-  if (err.code === "EBADCSRFTOKEN") {
-    return res.status(403).json({
-      status: "error",
-      message: "Invalid CSRF token",
     });
   }
 
