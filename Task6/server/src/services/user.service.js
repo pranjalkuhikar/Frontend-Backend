@@ -20,7 +20,7 @@ export const registerService = async ({ username, email, password }) => {
       password: hashedPassword,
     });
 
-    // Remove password from response
+    //  Convert to plain object before removing password
     const userResponse = newUser.toObject();
     delete userResponse.password;
 
@@ -32,23 +32,24 @@ export const registerService = async ({ username, email, password }) => {
 
 export const loginService = async ({ email, password }) => {
   try {
-    const user = await UserModel.findOne({ email }).select("+password");
+    const user = await UserModel.findOne({ email });
     if (!user) {
       throw new Error("Invalid credentials");
     }
 
-    const isMatch = await UserModel.comparePassword(password, user.password);
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       throw new Error("Invalid credentials");
     }
 
     const token = await user.generateToken();
 
-    // Remove sensitive data before sending response
-    const { password: _, ...userWithoutPassword } = user;
+    // Convert to plain object before removing password
+    const userObject = user.toObject();
+    delete userObject.password;
 
     return {
-      user: userWithoutPassword,
+      user: userObject,
       token,
     };
   } catch (error) {
