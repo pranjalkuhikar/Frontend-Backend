@@ -1,6 +1,7 @@
 import app from "./src/app.js";
+import config from "./src/config/config.js";
 
-let port = 3000;
+let port = config.PORT;
 
 app.listen(port, () => {
   console.log(`Server started at ${port}`);
