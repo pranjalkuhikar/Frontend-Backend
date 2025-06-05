@@ -29,3 +29,20 @@ export const registerService = async ({ username, email, password }) => {
     throw new Error(error.message || "Error during registration");
   }
 };
+
+export const loginService = async ({ email, password }) => {
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      throw new Error("Invalid credentials");
+    }
+    const token = await user.generateToken();
+    return { user, token };
+  } catch (error) {
+    throw new Error(error.message || "Error during login");
+  }
+};
