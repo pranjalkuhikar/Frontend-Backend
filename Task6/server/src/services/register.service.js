@@ -32,17 +32,26 @@ export const registerService = async ({ username, email, password }) => {
 
 export const loginService = async ({ email, password }) => {
   try {
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email }).select("+password");
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("Invalid credentials");
     }
-    const isMatch = await user.comparePassword(password);
+
+    const isMatch = await UserModel.comparePassword(password, user.password);
     if (!isMatch) {
       throw new Error("Invalid credentials");
     }
+
     const token = await user.generateToken();
-    return { user, token };
+
+    // Remove sensitive data before sending response
+    const { password: _, ...userWithoutPassword } = user;
+
+    return {
+      user: userWithoutPassword,
+      token,
+    };
   } catch (error) {
-    throw new Error(error.message || "Error during login");
+    throw new Error("Authentication failed");
   }
 };
