@@ -21,7 +21,7 @@ export const registerService = async ({ username, email, password }) => {
     });
 
     //  Convert to plain object before removing password
-    const userResponse = newUser.toObject();
+    const userResponse = newUser.toObject();  
     delete userResponse.password;
 
     return userResponse;
@@ -54,5 +54,21 @@ export const loginService = async ({ email, password }) => {
     };
   } catch (error) {
     throw new Error("Authentication failed");
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("XSRF-TOKEN");
+    res.clearCookie("connect.sid");
+    res.status(200).json({
+      status: "success",
+      message: "Logout successful",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
   }
 };

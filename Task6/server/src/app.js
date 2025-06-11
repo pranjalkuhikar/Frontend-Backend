@@ -23,10 +23,6 @@ app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 // Security middleware stack
-/* 
-  FOR POSTMAN TESTING: Comment these out
-  FOR REACT FRONTEND: Uncomment these
-*/
 // 1. MongoDB query sanitization
 app.use(mongoSanitize());
 
