@@ -21,7 +21,7 @@ export const registerService = async ({ username, email, password }) => {
     });
 
     //  Convert to plain object before removing password
-    const userResponse = newUser.toObject();  
+    const userResponse = newUser.toObject();
     delete userResponse.password;
 
     return userResponse;
@@ -57,7 +57,7 @@ export const loginService = async ({ email, password }) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logoutService = async (req, res) => {
   try {
     res.clearCookie("XSRF-TOKEN");
     res.clearCookie("connect.sid");
