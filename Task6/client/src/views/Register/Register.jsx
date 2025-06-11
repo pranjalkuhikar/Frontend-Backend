@@ -5,12 +5,8 @@ const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    phone: "",
     password: "",
-    confirmPassword: "",
     profileImage: null,
-    pdfDocument: null,
-    images: [],
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -96,7 +92,7 @@ const Register = () => {
                   value={formData.username}
                   onChange={handleChange}
                   required
-                  placeholder="pranjal"
+                  placeholder="John"
                   className="w-full pl-10 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
                 />
               </div>
