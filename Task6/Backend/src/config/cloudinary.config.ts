@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import multer from "multer";
+import multer, { FileFilterCallback } from "multer";
 import config from "./config.js";
 
 // Configure Cloudinary
@@ -14,21 +14,26 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
+    resource_type: "image",
     folder: "task6_profile_photos",
     allowed_formats: ["jpg", "jpeg", "png"],
     transformation: [{ width: 500, height: 500, crop: "limit" }],
-  },
+  } as any, // temporary type assertion to fix the error
 });
 
 // Configure multer
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5,
+    fileSize: 1024 * 1024 * 5, // 5MB
   },
-  fileFilter: (_req, file, cb) => {
+  fileFilter: (
+    _req: Express.Request,
+    file: Express.Multer.File,
+    cb: FileFilterCallback
+  ) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      return cb(new Error("Only image files are allowed!"), false);
+      return cb(new Error("Only image files are allowed!"));
     }
     cb(null, true);
   },
